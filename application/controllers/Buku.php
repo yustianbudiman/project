@@ -20,14 +20,48 @@ class Buku extends CI_Controller {
 	 */
 	public function index()
 	{
-		
-
-		$this->template->load('buku/index');
+		/*load API dari aplikasi core*/
+		$url="http://localhost/dashboard_apps-master/buku/";
+  		$curl = curl_init();
+  			curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+      		curl_setopt($curl, CURLOPT_USERPWD, "username:password");
+      		curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+      				'api_auth_key: f99aecef3d12e02dcbb6260bbdd35189c89e6e73',
+      				'Content-Type: aplicaton/json'
+      			));
+      		curl_setopt($curl, CURLOPT_URL, $url);
+      		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+	        $result = curl_exec($curl);
+	        curl_close($curl);
+	    $data=['result'=>$result,
+					];
+		$this->template->load('buku/index',$data);
 	}
 
 	public function create(){
 		$model=IsNewRecord($this->Buku_model->Attribute());
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+			for ($i=0; $i < count($this->input->post('id')); $i++) { 
+			$service_url = 'http://localhost/dashboard_apps-master/index.php/buku/';
+			$curl = curl_init($service_url);
+			$data = array(
+		        'judul_buku' => $this->input->post('judul_buku')[$i],
+		        'pengarang' => $this->input->post('pengarang')[$i],
+		        'penerbit' => $this->input->post('penerbit')[$i],
+		        'tahun_terbit' => $this->input->post('tahun_terbit')[$i]
+			);
+			curl_setopt($curl, CURLOPT_URL,$service_url);
+			curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
+			curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+			curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+          				'api_auth_key: f99aecef3d12e02dcbb6260bbdd35189c89e6e73',
+          				// 'Content-Type: application/x-www-form-urlencoded'
+          				// 'Content-Type: application/json'
+          			));
+			$output = curl_exec($curl);
+			curl_close($curl);
+			}
 			redirect('buku/index','refresh');
 		}else{
 			$data=[
@@ -40,16 +74,69 @@ class Buku extends CI_Controller {
 
 	public function update(){
 		$id=$this->input->get('id');
-		$model=$this->find_one();
+		/*load API dari aplikasi core*/
+			$url="http://localhost/dashboard_apps-master/buku/index/".$id;
+      		$curl = curl_init();
+      			curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+          		curl_setopt($curl, CURLOPT_USERPWD, "username:password");
+          		curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+          				'api_auth_key: f99aecef3d12e02dcbb6260bbdd35189c89e6e73',
+          				'Content-Type: aplicaton/json'
+          			));
+          		curl_setopt($curl, CURLOPT_URL, $url);
+          		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+		        $result = curl_exec($curl);
+		        curl_close($curl);
+
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+				$service_url = 'http://localhost/dashboard_apps-master/index.php/buku/single/'.$this->input->post('id');
+				$curl = curl_init($service_url);
+				$data = array(
+			         	'judul_buku' => $this->input->post('judul_buku'),
+				        'pengarang' => $this->input->post('pengarang'),
+				        'penerbit' => $this->input->post('penerbit'),
+				        'tahun_terbit' => $this->input->post('tahun_terbit')
+				);
+				curl_setopt($curl, CURLOPT_URL,$service_url);
+				curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
+				curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
+				curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+				curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+	          				'api_auth_key: f99aecef3d12e02dcbb6260bbdd35189c89e6e73',
+	          				'Content-Type: application/x-www-form-urlencoded',
+	          			));
+				$output = curl_exec($curl);
+				curl_close($curl);
 			redirect('buku/index','refresh');
 		}else{
 			$data=[
-				'content'=>$model,
+				'content'=>json_decode($result,true),
 				'halo'=>'hallo'
 			];
 			$this->template->load('buku/update',$data);
+		}
+	}
+
+	public function delete(){
+		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+			$service_url = 'http://localhost/dashboard_apps-master/index.php/buku/single/'.$this->input->post('id');
+			$curl = curl_init($service_url);
+			$data = array(
+		        'id' => $this->input->post('id'),
+		        'delete' => true,
+			);
+			curl_setopt($curl, CURLOPT_URL,$service_url);
+			curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+			curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+			curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+          				'api_auth_key: f99aecef3d12e02dcbb6260bbdd35189c89e6e73',
+          				'Content-Type: application/x-www-form-urlencoded',
+          			));
+			$output = curl_exec($curl);
+			curl_close($curl);
+			redirect('buku/index');
 		}
 	}
 	
