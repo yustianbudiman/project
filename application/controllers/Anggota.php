@@ -7,21 +7,21 @@ class Anggota extends CI_Controller {
 	 * Index Page for this controller.
 	 *
 	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
+	 * 		http://example.com/index.php/anggota
 	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
+	 * 		http://example.com/index.php/anggota/index
 	 *	- or -
 	 * Since this controller is set as the default controller in
 	 * config/routes.php, it's displayed at http://example.com/
 	 *
 	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
+	 * map to /index.php/anggota/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
 	public function index()
 	{
 			/*load API dari aplikasi core*/
-			$url="http://localhost/dashboard_apps-master/V1/";
+			$url="http://localhost/dashboard_apps-master/anggota/";
       		$curl = curl_init();
       			curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
           		curl_setopt($curl, CURLOPT_USERPWD, "username:password");
@@ -35,21 +35,20 @@ class Anggota extends CI_Controller {
 		        curl_close($curl);
 		    $data=['result'=>$result,
 					];
-		$this->template->load('mahasiswa/index',$data);
+		$this->template->load('anggota/index',$data);
 	}
 
 	public function create(){
-		$model=IsNewRecord($this->Mahasiswa_model->Attribute());
+		$model=IsNewRecord($this->Anggota_model->Attribute());
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-			$service_url = 'http://localhost/dashboard_apps-master/index.php/V1/';
+			$service_url = 'http://localhost/dashboard_apps-master/index.php/anggota/';
 			$curl = curl_init($service_url);
 			$data = array(
-		        'firstName' => $this->input->post('firstName'),
-		        'lastName' => $this->input->post('lastName'),
-		        'email' => $this->input->post('email'),
-		        'mobileNumber' => $this->input->post('mobileNumber'),
-		        'status' => $this->input->post('status')
+		        'nama_anggota' => $this->input->post('nama_anggota'),
+		        'alamat' => $this->input->post('alamat'),
+		        'no_telepon' => $this->input->post('no_telepon'),
+		        'foto' => $this->input->post('foto'),
 			);
 			curl_setopt($curl, CURLOPT_URL,$service_url);
 			curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
@@ -62,13 +61,13 @@ class Anggota extends CI_Controller {
           			));
 			$output = curl_exec($curl);
 			curl_close($curl);
-			redirect('welcome/index','refresh');
+			redirect('anggota/index','refresh');
 		}else{
 			$data=[
 				'content'=>$model,
 				'halo'=>'hallo'
 			];
-			$this->template->load('mahasiswa/create',$data);
+			$this->template->load('anggota/create',$data);
 		}
 	}
 
@@ -76,7 +75,7 @@ class Anggota extends CI_Controller {
 		$id=$this->input->get('id');
 
 		/*load API dari aplikasi core*/
-			$url="http://localhost/dashboard_apps-master/V1/index/".$id;
+			$url="http://localhost/dashboard_apps-master/anggota/index/".$id;
       		$curl = curl_init();
       			curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
           		curl_setopt($curl, CURLOPT_USERPWD, "username:password");
@@ -88,17 +87,15 @@ class Anggota extends CI_Controller {
           		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 		        $result = curl_exec($curl);
 		        curl_close($curl);
-
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-			$service_url = 'http://localhost/dashboard_apps-master/index.php/V1/single/'.$this->input->post('_id');
+			$service_url = 'http://localhost/dashboard_apps-master/index.php/anggota/single/'.$this->input->post('_id');
 			$curl = curl_init($service_url);
 			$data = array(
-		        'firstName' => $this->input->post('firstName'),
-		        'lastName' => $this->input->post('lastName'),
-		        'email' => $this->input->post('email'),
-		        'mobileNumber' => $this->input->post('mobileNumber'),
-		        'status' => $this->input->post('status')
+		        'nama_anggota' => $this->input->post('nama_anggota'),
+		        'alamat' => $this->input->post('alamat'),
+		        'no_telepon' => $this->input->post('no_telepon'),
+		        'foto' => $this->input->post('foto')
 			);
 			curl_setopt($curl, CURLOPT_URL,$service_url);
 			curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
@@ -110,23 +107,23 @@ class Anggota extends CI_Controller {
           			));
 			$output = curl_exec($curl);
 			curl_close($curl);
-			redirect('welcome/index','refresh');
+			redirect('anggota/index','refresh');
 		}else{
 
 			$data=[
 				'content'=>json_decode($result,true),
 				'halo'=>'hallo'
 			];
-			$this->template->load('mahasiswa/update',$data);
+			$this->template->load('anggota/update',$data);
 		}
 	}
 
 	public function delete(){
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-			$service_url = 'http://localhost/dashboard_apps-master/index.php/V1/single/'.$this->input->post('_id');
+			$service_url = 'http://localhost/dashboard_apps-master/index.php/anggota/single/'.$this->input->post('id');
 			$curl = curl_init($service_url);
 			$data = array(
-		        'id' => $this->input->post('_id'),
+		        'id' => $this->input->post('id'),
 		        'delete' => true,
 			);
 			curl_setopt($curl, CURLOPT_URL,$service_url);
@@ -139,7 +136,7 @@ class Anggota extends CI_Controller {
           			));
 			$output = curl_exec($curl);
 			curl_close($curl);
-			redirect('welcome/index');
+			redirect('anggota/index');
 		}
 	}
 

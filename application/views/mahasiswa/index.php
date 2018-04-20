@@ -83,7 +83,7 @@
         });
     });
     $(document).ready(function(){
-    $('#tbl_mahasiswa').DataTable();
+        $('#tbl_mahasiswa').DataTable();
     });
 
 </script>

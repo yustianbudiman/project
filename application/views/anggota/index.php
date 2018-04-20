@@ -1,19 +1,18 @@
 <div class="panel panel-primary">
-    <div class="panel-heading">Panel Buku</div>
+    <div class="panel-heading">Panel anggota</div>
     	<div class="panel-body">
     		<div class="clearfix" style="margin-bottom: 10px;">
-    		<a href="<?php echo site_url()?>buku/create" class="btn btn-primary">Tambah</a>
-    			
+    		<a href="<?php echo site_url()?>anggota/create" class="btn btn-primary">Tambah</a>
     		</div>
 			<div class="table-responsive">
-    		<table class="table table-bordered table-hover" id="tbl_buku">
+    		<table class="table table-bordered table-hover" id="tbl_anggota">
     			<thead>
     				<tr>
                         <th>No</th>
-    					<th>First Name</th>
-    					<th>Last Name</th>
-    					<th>Email</th>
-	    				<th>Phone</th>
+    					<th>Nama Anggota</th>
+    					<th>Alamat</th>
+    					<th>No Telepon</th>
+	    				<th>foto</th>
 	    				<th class="tbl_center">aksi</th>
     				</tr>
     			</thead>
@@ -24,12 +23,12 @@
     				?>
     				<tr>
                         <td><?php echo $no ?></td>
-    					<td><?php echo $value->judul_buku ?></td>
-    					<td><?php echo $value->pengarang ?></td>
-    					<td><?php echo $value->penerbit ?></td>
-    					<td><?php echo $value->tahun_terbit ?></td>
+    					<td><?php echo $value->nama_anggota ?></td>
+    					<td><?php echo $value->alamat ?></td>
+    					<td><?php echo $value->no_telepon ?></td>
+    					<td><?php echo $value->foto ?></td>
     					<td class="tbl_center">
-    						<a href="<?php echo site_url()?>buku/update?id=<?php echo $value->id ?>" class="btn btn-primary  btn-xs"><i class="glyphicon glyphicon-pencil"></i> edit</a>
+    						<a href="<?php echo site_url()?>anggota/update?id=<?php echo $value->id ?>" class="btn btn-primary  btn-xs"><i class="glyphicon glyphicon-pencil"></i> edit</a>
     						<button class="btn btn-primary btn-xs" id="tmp_btn_delete" data-toggle="modal" data-target="#myModal" json='<?php echo str_replace("'", "#", json_encode($value)) ?>'><i class="glyphicon glyphicon-trash"></i> Hapus</button>
     					</td>
     				</tr>
@@ -71,7 +70,7 @@
 		var id='1';
 		$.ajax({ 
 		    type: 'GET', 
-		    url: "<?php echo base_url().'buku/get'?>", 
+		    url: "<?php echo base_url().'anggota/get'?>", 
 		    data: { get_param: 'value' }, 
 		    dataType: 'json',
 		    beforeSend: function () {
@@ -93,7 +92,7 @@
         var data=JSON.parse($(this).attr('json'));
         $.ajax({ 
             type: 'POST', 
-            url: "<?php echo base_url().'buku/delete'?>", 
+            url: "<?php echo base_url().'anggota/delete'?>", 
             data: { id: data.id }, 
             dataType: 'json',
             beforeSend: function () {
@@ -104,12 +103,12 @@
             },
             complete :function(){
                 $('.loading_new').css('display','none');
-                window.location.replace("<?php echo base_url().'buku/index'?>");
+                window.location.replace("<?php echo base_url().'anggota/index'?>");
             }
         });
     });
     $(document).ready(function(){
-        $('#tbl_buku').DataTable();
+        $('#tbl_anggota').DataTable();
     });
 </script>
 

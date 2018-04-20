@@ -41,14 +41,13 @@ class Buku extends CI_Controller {
 	public function create(){
 		$model=IsNewRecord($this->Buku_model->Attribute());
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-			for ($i=0; $i < count($this->input->post('id')); $i++) { 
 			$service_url = 'http://localhost/dashboard_apps-master/index.php/buku/';
 			$curl = curl_init($service_url);
 			$data = array(
-		        'judul_buku' => $this->input->post('judul_buku')[$i],
-		        'pengarang' => $this->input->post('pengarang')[$i],
-		        'penerbit' => $this->input->post('penerbit')[$i],
-		        'tahun_terbit' => $this->input->post('tahun_terbit')[$i]
+		        'judul_buku' => $this->input->post('judul_buku'),
+		        'pengarang' => $this->input->post('pengarang'),
+		        'penerbit' => $this->input->post('penerbit'),
+		        'tahun_terbit' => $this->input->post('tahun_terbit')
 			);
 			curl_setopt($curl, CURLOPT_URL,$service_url);
 			curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
@@ -61,7 +60,6 @@ class Buku extends CI_Controller {
           			));
 			$output = curl_exec($curl);
 			curl_close($curl);
-			}
 			redirect('buku/index','refresh');
 		}else{
 			$data=[

@@ -66,7 +66,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       <h4></h4>
     	
       <ul class="nav nav-pills nav-stacked">
-        <li class="active"><a href="<?php echo base_url()?>welcome/index.asp">Home</a></li>
+        <li class="active"><a href="<?php echo base_url()?>welcome/index.asp">User</a></li>
         <li><a href="<?php echo base_url()?>buku/index.asp">Buku</a></li>
         <li><a href="<?php echo base_url()?>anggota/index.asp">Anggota</a></li>
         <li><a href="<?php echo base_url()?>peminjaman/index.asp">Peminjaman</a></li>
